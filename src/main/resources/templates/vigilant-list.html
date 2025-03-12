@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Vigilantes</title>
+</head>
+<body>
+<h1>Lista de Vigilantes</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Identificación</th>
+        <th>Código</th>
+        <th>Turno</th>
+        <th>Compañía</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="vigilant : ${vigilantes}"> <!-- Cambia "vigilant" a "vigilantes" -->
+        <td th:text="${vigilant.id}"></td>
+        <td th:text="${vigilant.first_name}"></td>
+        <td th:text="${vigilant.last_name}"></td>
+        <td th:text="${vigilant.identification}"></td>
+        <td th:text="${vigilant.code}"></td>
+        <td th:text="${vigilant.turn}"></td>
+        <td th:text="${vigilant.company}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

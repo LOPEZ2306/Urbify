@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Vigilante</title>
+</head>
+<body>
+<h1>Formulario de Vigilante</h1>
+<form th:action="@{/vigilants}" th:object="${vigilant}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    <label for="first_name">Nombre:</label>
+    <input type="text" th:field="*{first_name}" id="first_name" />
+    <br/>
+    <label for="last_name">Apellidos:</label>
+    <input type="text" th:field="*{last_name}" id="last_name" />
+    <br/>
+    <label for="identification">Identificación:</label>
+    <input type="text" th:field="*{identification}" id="identification" />
+    <br/>
+    <label for="code">Código:</label>
+    <input type="text" th:field="*{code}" id="code" />
+    <br/>
+    <label for="turn">Turno:</label>
+    <input type="text" th:field="*{turn}" id="turn" />
+    <br/>
+    <label for="company">Compañía:</label>
+    <input type="text" th:field="*{company}" id="company" />
+    <br/>
+    <button type="submit">Guardar</button>
+</form>
+</body>
+</html>
