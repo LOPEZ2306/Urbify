@@ -7,7 +7,9 @@
 </head>
 <body>
 <h1>Formulario de Vigilante</h1>
-<form th:action="@{/vigilants}" th:object="${vigilant}" method="post">
+<form th:action="@{/admins/vigilants}" th:object="${vigilant}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
     <input type="hidden" th:field="*{id}" />
     <label for="first_name">Nombre:</label>
     <input type="text" th:field="*{first_name}" id="first_name" />

@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Vigilantes</title>
 </head>
 <body>
@@ -17,10 +16,11 @@
         <th>Código</th>
         <th>Turno</th>
         <th>Compañía</th>
+        <th>Acciones</th> <!-- Nueva columna -->
     </tr>
     </thead>
     <tbody>
-    <tr th:each="vigilant : ${vigilantes}"> <!-- Cambia "vigilant" a "vigilantes" -->
+    <tr th:each="vigilant : ${vigilantes}">
         <td th:text="${vigilant.id}"></td>
         <td th:text="${vigilant.first_name}"></td>
         <td th:text="${vigilant.last_name}"></td>
@@ -28,6 +28,17 @@
         <td th:text="${vigilant.code}"></td>
         <td th:text="${vigilant.turn}"></td>
         <td th:text="${vigilant.company}"></td>
+        <td>
+            <!-- Enlace para editar -->
+            <a th:href="@{/admins/vigilants/edit/{id}(id=${vigilant.id})}">
+                <button>Editar</button>
+            </a>
+            <!-- Formulario para eliminar (POST) -->
+            <form th:action="@{/admins/vigilants/delete/{id}(id=${vigilant.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit">Eliminar</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
