@@ -1,19 +1,64 @@
-    <!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Login</title>
-    </head>
-    <body>
-    <h1>Login</h1>
-    <form th:action="@{/login}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" />
-        <br/>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" />
-        <br/>
-        <button type="submit">Sign in</button>
-    </form>
-    </body>
-    </html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urbify | Sistema de Gestión Residencial</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <link rel="shortcut icon" th:href="@{/img/logo.png}" type="image/x-icon">
+</head>
+<body class="p-0 m-0">
+<div th:style="'background-image: url(/img/fondo4.jpg);'"
+     class="bg-cover bg-no-repeat bg-center bg-fixed">
+    <div class="min-h-screen flex flex-col justify-center">
+        <div class="flex items-center justify-center gap-180 max-h-30">
+            <a th:href="@{/}" class="py-2 px-5 transition duration-200 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 bg-[#138fcb] text-white rounded-lg font-semibold text-center">
+                <i class="text-lg hgi hgi-stroke hgi-arrow-left-02"></i>
+                <span class="text-lg"> Volver</span>
+            </a>
+            <img class="max-h-40 max-w-50" th:src="@{/img/logo.png}" alt="Logo Urbify">
+        </div>
+
+        <!-- Formulario de login -->
+        <div class="px-10 mx-auto xs:p-0 md:w-full md:max-w-md">
+            <h1 class="mb-5 text-2xl font-bold text-center">
+                <i class="text-4xl hgi hgi-stroke"></i> LOGIN
+            </h1>
+
+            <form th:action="@{/login}" method="post" class="bg-transparent shadow w-full rounded-lg border-[#138fcb] border-4">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="px-5 pt-10">
+                    <!-- Campo Email -->
+                    <label class="block pb-1 text-lg font-semibold text-gray-600">E-mail</label>
+                    <input
+                            type="email"
+                            name="username"
+                            class="w-full px-3 py-2 mt-1 mb-5 border rounded-lg text-md"
+                            required
+                    />
+
+                    <!-- Campo Contraseña -->
+                    <label class="block pb-1 text-lg font-semibold text-gray-600">Contraseña</label>
+                    <input
+                            type="password"
+                            name="password"
+                            class="w-full px-3 py-2 mt-1 mb-5 border rounded-lg text-md"
+                            required
+                    />
+
+                    <!-- Botón Entrar -->
+                    <button type="submit" class="transition duration-200 bg-[#138fcb] hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-bold text-center">
+                        <span class="inline-block mr-2 text-lg">Entrar</span>
+                    </button>
+
+                    <!-- Mensajes de error -->
+                    <p th:if="${param.error}" class="text-red-600 mt-2 text-center">Usuario o contraseña incorrectos.</p>
+                    <p th:if="${param.logout}" class="text-green-600 mt-2 text-center">Has cerrado sesión correctamente.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
