@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
 
@@ -32,12 +33,16 @@ public class SecurityConfig {
         http
                 .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
+
                         // Permitir acceso a recursos estáticos y páginas públicas
                         .requestMatchers("/", "/index", "/public/**", "/img/**").permitAll()
+
                         // Configuración de acceso para administradores
-                        .requestMatchers("/admin-view/**", "/admin-action/**", "/vigilant-list/**", "/vigilant-form/**").hasRole("ADMIN")
-                        // Configuración de acceso para vigilantes y administradores
-                        .requestMatchers("/vigilant-view/**").hasAnyRole("VIGILANT", "ADMIN")
+                        .requestMatchers("/admin-view/**","/vigilant-view/**" ).hasRole("ADMIN")
+
+                        // Configuración de acceso para vigilantes
+                        .requestMatchers("/vigilant/action", "/vigilant-view/**").hasRole("VIGILANT")
+
                         // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
                 )
@@ -82,13 +87,14 @@ public class SecurityConfig {
                     response.sendRedirect("/admins/action"); // Redirección para admin
                 } else if (authentication.getAuthorities().stream()
                         .anyMatch(a -> a.getAuthority().equals("ROLE_VIGILANT"))) {
-                    response.sendRedirect("/vigilant-view/action"); // Redirección para vigilante
+                    response.sendRedirect("/vigilant/action"); // Redirección para vigilante
                 } else {
                     response.sendRedirect("/"); // Usuario sin rol específico va a la raíz
                 }
             }
         };
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

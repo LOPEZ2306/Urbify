@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urbify | Sistema de Gestión Residencial</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <link rel="shortcut icon" th:href="@{/img/logo.png}" type="image/x-icon" />
+</head>
+<body>
+<main class="flex bg-[url('/img/fondo4.jpg')] bg-cover bg-no-repeat bg-center bg-fixed">
+    <aside class="rounded-r-xl bg-[#138fcb] text-gray-700 h-screen w-[30%] p-4 divide-y-4 divide-white">
+        <div class="mb-2 p-4">
+            <div class="flex justify-center mb-2">
+                <img class="max-w-40 rounded-full bg-white border-stone-300 border-4"
+                     th:src="@{/img/vigilante.png}" alt="Imagen de Perfil Vigilante" />
+            </div>
+            <h5 class="text-center font-sans text-2xl font-bold text-white">
+                <span th:text="${vigilant.firstName + ' ' + vigilant.lastName}"></span>
+            </h5>
+        </div>
+        <section class="flex flex-col gap-1 p-2 font-sans font-normal text-white text-xl">
+            <div class="flex w-full p-3 text-start">
+                <p>
+                    <span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-user"></i></span>
+                    <span class="font-bold">Identificación: </span>
+                    <span th:text="${vigilant.identification}"></span>
+                </p>
+            </div>
+            <div class="flex w-full p-3 text-start">
+                <p>
+                    <span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-labor"></i></span>
+                    <span class="font-bold">Empleado: </span>
+                    <span th:text="${vigilant.code}"></span>
+                </p>
+            </div>
+            <div class="flex w-full p-3 text-start">
+                <p>
+                    <span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-clock-01"></i></span>
+                    <span class="font-bold">Turno: </span>
+                    <span th:text="${vigilant.turn}"></span>
+                </p>
+            </div>
+            <div class="flex w-full p-3 text-start">
+                <p>
+                    <span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-permanent-job"></i></span>
+                    <span class="font-bold">Empresa: </span>
+                    <span th:text="${vigilant.company}"></span>
+                </p>
+            </div>
+            <form th:action="@{/logout}" method="post" class="w-full">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="w-full py-2 rounded-2xl transition duration-200 bg-red-400 hover:bg-red-500 text-lg text-center font-bold text-white cursor-pointer mt-20">
+                    <i class="hgi hgi-stroke hgi-logout-05 text-lg"></i>
+                    CERRAR SESIÓN
+                </button>
+            </form>
+        </section>
+    </aside>
+    <section class="w-[70%]">
+        <div class="flex justify-end">
+            <img class="max-h-40 max-w-50" th:src="@{/img/logo.png}" alt="Logo Urbify" />
+        </div>
+        <h1 class="px-14 text-2xl font-semibold tracking-wide">
+            BIENVENIDO/A <span class="text-[#138fcb]" th:text="${vigilant.firstName + ' ' + vigilant.lastName}"></span>
+        </h1>
+        <div class="my-8 text-center ">
+            <h1 class="text-4xl text-[#138fcb] font-bold">REGISTRO DE VISITANTES</h1>
+            <p class="py-4 text-2xl">¿Qué tipo de visitante es?</p>
+            <div class="flex flex-col justify-center items-center gap-5">
+                <a th:href="@{/visitant-view/visitant-list}"
+                   class="min-w-85 py-6 rounded-2xl transition duration-200 hover:bg-blue-600  bg-blue-500 text-3xl font-bold text-white  cursor-pointer">
+                    <i class="hgi hgi-stroke hgi-user text-4xl"></i>
+                    PERSONA</a>
+                <a th:href="@{/vehiculo}"
+                   class="min-w-85 py-6 rounded-2xl transition duration-200 hover:bg-blue-600 bg-blue-500 text-3xl font-bold text-white cursor-pointer">
+                    <i class="hgi hgi-stroke hgi-car-01 text-4xl"></i>
+                    VEHÍCULO</a>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
+
+

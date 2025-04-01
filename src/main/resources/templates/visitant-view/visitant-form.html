@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urbify | Sistema de Gestion Residencial</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <link rel="shortcut icon" th:href="@{/img/logo.png}" type="image/x-icon" />
+</head>
+
+<body>
+<main class="flex bg-[url('/img/fondo4.jpg')] bg-cover bg-no-repeat bg-center bg-fixed">
+    <aside class="rounded-r-xl bg-[#138fcb] text-gray-700 h-screen w-[30%] p-4 divide-y-4 divide-white">
+        <div class="p-4 mb-2">
+            <div class="flex justify-center mb-2">
+                <img class="bg-white border-4 rounded-full max-w-40 border-stone-300" th:src="@{/img/vigilante.png}"
+                     alt="Imagen de Perfil Vigilante" />
+            </div>
+            <h5 class="font-sans text-2xl font-bold text-center text-white">
+                <span th:text="${user.fullName}">ADMINISTRADOR</span>
+            </h5>
+        </div>
+        <section class="flex flex-col gap-1 p-2 font-sans text-xl font-normal text-white">
+            <div class="flex w-full p-3 text-start">
+                <p><span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-user"></i></span>
+                    <span class="font-bold">Identificación: </span>
+                    <span th:text="${user.identification}">1027356460</span>
+                </p>
+            </div>
+            <div class="flex w-full p-3 text-start">
+                <p><span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-permanent-job"></i></span>
+                    <span class="font-bold">Unidad: </span>
+                    <span th:text="${user.unit}">Espanto</span>
+                </p>
+            </div>
+            <form th:action="@{/logout}" method="post" class="w-full">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="w-full py-2 mt-20 text-lg font-bold text-center text-white transition duration-200 bg-red-400 cursor-pointer rounded-2xl hover:bg-red-500">
+                    <i class="text-lg hgi hgi-stroke hgi-logout-05"></i>
+                    CERRAR SESIÓN
+                </button>
+            </form>
+        </section>
+    </aside>
+    <section class="w-[70%]">
+        <div class="flex items-center justify-end gap-140 max-h-40">
+            <a th:href="@{/visitant-view/visitant-list}"
+               class="py-2 px-5 transition duration-200 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 bg-[#138fcb] text-white rounded-lg font-semibold text-center">
+                <i class="text-lg hgi hgi-stroke hgi-arrow-left-02"></i>
+                <span class="text-lg"> Volver</span>
+            </a>
+            <img class="max-h-40 max-w-50" th:src="@{/img/logo.png}" alt="Logo Urbify" />
+        </div>
+        <div class="my-8 text-center ">
+            <h1 class="text-4xl text-[#138fcb] font-bold">NUEVO REGISTRO VISITANTE</h1>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="flex items-center justify-center">
+            <div class="mx-auto w-full max-w-[550px]">
+                <form th:action="@{/visitant/save}" th:object="${visitant}" method="POST">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <div class="flex flex-wrap -mx-3">
+                        <div class="w-full px-3 sm:w-1/2">
+                            <div class="mb-5">
+                                <label for="firstName" class="block mb-3 text-base font-medium">
+                                    Nombre
+                                </label>
+                                <input type="text" th:field="*{firstName}"
+                                       id="firstName" placeholder="Nombre"
+                                       class="w-full rounded-2xl border-2 border-[#138fcb] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:shadow-md"
+                                       required />
+                            </div>
+                        </div>
+                        <div class="w-full px-3 sm:w-1/2">
+                            <div class="mb-5">
+                                <label for="lastName" class="block mb-3 text-base font-medium">
+                                    Apellido
+                                </label>
+                                <input type="text" th:field="*{lastName}"
+                                       id="lastName" placeholder="Apellido"
+                                       class="w-full rounded-2xl border-2 border-[#138fcb] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:shadow-md"
+                                       required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-3">
+                        <div class="w-full px-3 sm:w-1/2">
+                            <div class="mb-5">
+                                <label for="identification" class="block mb-3 text-base font-medium">
+                                    Identificación
+                                </label>
+                                <input type="text" th:field="*{identification}"
+                                       id="identification" placeholder="Identificación"
+                                       class="w-full rounded-2xl border-2 border-[#138fcb] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:shadow-md"
+                                       required />
+                            </div>
+                        </div>
+                        <div class="w-full px-3 sm:w-1/2">
+                            <div class="mb-5">
+                                <label for="apartment" class="block mb-3 text-base font-medium">
+                                    Apartamento
+                                </label>
+                                <input type="text" th:field="*{apartment}"
+                                       id="apartment" placeholder="Apartamento"
+                                       class="w-full rounded-2xl border-2 border-[#138fcb] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:shadow-md"
+                                       required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <button type="submit"
+                                class="hover:shadow-form rounded-2xl transition duration-200 bg-[#138fcb] hover:bg-blue-600 py-3 px-8 text-center text-xl font-semibold text-white outline-none">
+                            <i class="pr-2 text-xl hgi hgi-stroke hgi-user-add-01"></i>
+                            Ingresar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,16 +23,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin admin = adminRepository.findByEmail(username);
-        if (admin != null) {
+        // Buscar admin
+        Optional<Admin> adminOptional = adminRepository.findByEmail(username);
+        if (adminOptional.isPresent()) {
+            Admin admin = adminOptional.get();
             return User.withUsername(admin.getEmail())
                     .password(admin.getPassword())
                     .authorities("ROLE_ADMIN")
                     .build();
         }
 
-        Vigilant vigilant = vigilantRepository.findByEmail(username);
-        if (vigilant != null) {
+        // Buscar vigilant
+        Optional<Vigilant> vigilantOptional = vigilantRepository.findByEmail(username);
+        if (vigilantOptional.isPresent()) {
+            Vigilant vigilant = vigilantOptional.get();
             return User.withUsername(vigilant.getEmail())
                     .password(vigilant.getPassword())
                     .authorities("ROLE_VIGILANT")

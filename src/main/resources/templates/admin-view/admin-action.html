@@ -13,21 +13,27 @@
     <aside class="rounded-r-xl bg-[#138fcb] text-gray-700 h-screen w-[30%] p-4 divide-y-4 divide-white">
         <div class="p-4 mb-2">
             <div class="flex justify-center mb-2">
-                <img class="bg-white border-4 rounded-full max-w-40 border-stone-300" th:src="@{/img/vigilante.png}"
-                     alt="Imagen de Perfil Vigilante" />
+                <img class="bg-white border-4 rounded-full max-w-40 border-stone-300"
+                     th:src="@{/img/admin.png}" alt="Imagen de Perfil Admin" />
             </div>
             <h5 class="font-sans text-2xl font-bold text-center text-white">
-                ADMINISTRADOR
+                <span th:text="${admin.firstName + ' ' + admin.lastName}"></span>
             </h5>
         </div>
         <section class="flex flex-col gap-1 p-2 font-sans text-xl font-normal text-white">
             <div class="flex w-full p-3 text-start">
-                <p><span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-user"></i></span>
-                    <span class="font-bold">Identificación: </span>1027356460</p>
+                <p>
+                    <span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-user"></i></span>
+                    <span class="font-bold">Identificación: </span>
+                    <span th:text="${admin.identification}"></span>
+                </p>
             </div>
             <div class="flex w-full p-3 text-start">
-                <p><span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-permanent-job"></i></span>
-                    <span class="font-bold">Unidad: </span>Espanto</p>
+                <p>
+                    <span class="pr-2"><i class="font-bold hgi hgi-stroke hgi-permanent-job"></i></span>
+                    <span class="font-bold">Correo: </span>
+                    <span th:text="${admin.email}"></span>
+                </p>
             </div>
             <!-- Formulario de Logout con CSRF -->
             <form th:action="@{/logout}" method="post" class="w-full">
@@ -44,7 +50,7 @@
             <img class="max-h-40 max-w-50" th:src="@{/img/logo.png}" alt="Logo Urbify" />
         </div>
         <h1 class="text-2xl font-semibold tracking-wide px-14">
-            BIENVENIDO/A <span class="text-[#138fcb]">ADMINISTRADOR</span>
+            BIENVENIDO/A <span class="text-[#138fcb]" th:text="${admin.firstName + ' ' + admin.lastName}"></span>
         </h1>
         <div class="my-8 text-center ">
             <h1 class="text-4xl text-[#138fcb] font-bold">REGISTRO DE VIGILANTES</h1>

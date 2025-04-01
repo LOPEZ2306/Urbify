@@ -3,14 +3,15 @@ package com.example.urbify.service;
 import com.example.urbify.models.Admin;
 import com.example.urbify.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AdminService {
+
     @Autowired
     private AdminRepository adminRepository;
 
@@ -18,21 +19,21 @@ public class AdminService {
     private PasswordEncoder passwordEncoder;
 
     public Admin save(Admin admin) {
-        admin.setPassword(passwordEncoder.encode(admin.getPassword())); // Encripta la contraseña
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         return adminRepository.save(admin);
     }
 
-    public List<Admin> listAll() {
+    public List<Admin> listAllAdmins() {
         return adminRepository.findAll();
     }
 
-    public Admin getbyid(Long id) {
-        Optional<Admin> optionalAdmin = adminRepository.findById(id);
-        return optionalAdmin.orElse(null); // Devuelve null si no se encuentra el admin
+    public Admin getById(Long id) {
+        return adminRepository.findById(id).orElse(null);
     }
 
     public Admin findByEmail(String email) {
-        return adminRepository.findByEmail(email);
+        return adminRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Admin no encontrado"));
     }
 
     public void delete(Long id) {
