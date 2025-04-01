@@ -4,45 +4,42 @@ import com.example.urbify.models.Admin;
 import com.example.urbify.models.Vigilant;
 import com.example.urbify.repository.AdminRepository;
 import com.example.urbify.repository.VigilantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
+import java.util.Collections;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
+    private final VigilantRepository vigilantRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // Evita el ciclo
 
-    @Autowired
-    private VigilantRepository vigilantRepository;
+    public CustomUserDetailsService(AdminRepository adminRepository, VigilantRepository vigilantRepository) {
+        this.adminRepository = adminRepository;
+        this.vigilantRepository = vigilantRepository;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Buscar admin
-        Optional<Admin> adminOptional = adminRepository.findByEmail(username);
-        if (adminOptional.isPresent()) {
-            Admin admin = adminOptional.get();
-            return User.withUsername(admin.getEmail())
-                    .password(admin.getPassword())
-                    .authorities("ROLE_ADMIN")
-                    .build();
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // Comparación de contraseñas sin inyectar PasswordEncoder
+        Admin admin = adminRepository.findByEmail(email).orElse(null);
+        if (admin != null) {
+            return new User(admin.getEmail(), admin.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
         }
 
-        // Buscar vigilant
-        Optional<Vigilant> vigilantOptional = vigilantRepository.findByEmail(username);
-        if (vigilantOptional.isPresent()) {
-            Vigilant vigilant = vigilantOptional.get();
-            return User.withUsername(vigilant.getEmail())
-                    .password(vigilant.getPassword())
-                    .authorities("ROLE_VIGILANT")
-                    .build();
+        Vigilant vigilant = vigilantRepository.findByEmail(email).orElse(null);
+        if (vigilant != null) {
+            return new User(vigilant.getEmail(), vigilant.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_VIGILANT")));
         }
 
-        throw new UsernameNotFoundException("Usuario no encontrado: " + username);
+        throw new UsernameNotFoundException("Usuario no encontrado");
     }
 }

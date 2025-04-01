@@ -1,23 +1,23 @@
 package com.example.urbify.config;
 
 import com.example.urbify.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
 
@@ -25,53 +25,40 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
-
-                        // Permitir acceso a recursos estáticos y páginas públicas
                         .requestMatchers("/", "/index", "/public/**", "/img/**").permitAll()
-
-                        // Configuración de acceso para administradores
-                        .requestMatchers("/admin-view/**","/vigilant-view/**" ).hasRole("ADMIN")
-
-                        // Configuración de acceso para vigilantes
+                        .requestMatchers("/admin-view/**").hasRole("ADMIN")
                         .requestMatchers("/vigilant/action", "/vigilant-view/**").hasRole("VIGILANT")
-
-                        // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        // Página de login
                         .loginPage("/public/login")
-                        // URL para procesar el login
                         .loginProcessingUrl("/login")
-                        // Manejador de éxito de autenticación personalizado
                         .successHandler(customAuthenticationSuccessHandler())
-                        // URL en caso de fallo de login
                         .failureUrl("/public/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        // URL para procesar el logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        // URL de redirección después del logout
                         .logoutSuccessUrl("/public/login?logout")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-                // Configurar CSRF correctamente en lugar de deshabilitarlo
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-
-                );
+                )
+                .authenticationProvider(authenticationProvider());
 
         return http.build();
     }
@@ -82,22 +69,27 @@ public class SecurityConfig {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                                 Authentication authentication) throws IOException, ServletException {
-                if (authentication.getAuthorities().stream()
-                        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                    response.sendRedirect("/admins/action"); // Redirección para admin
-                } else if (authentication.getAuthorities().stream()
-                        .anyMatch(a -> a.getAuthority().equals("ROLE_VIGILANT"))) {
-                    response.sendRedirect("/vigilant/action"); // Redirección para vigilante
+                if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                    response.sendRedirect("/admins/action");
+                } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_VIGILANT"))) {
+                    response.sendRedirect("/vigilant/action");
                 } else {
-                    response.sendRedirect("/"); // Usuario sin rol específico va a la raíz
+                    response.sendRedirect("/");
                 }
             }
         };
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 }

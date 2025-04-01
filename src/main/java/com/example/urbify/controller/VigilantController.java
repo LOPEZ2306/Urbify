@@ -1,14 +1,13 @@
 package com.example.urbify.controller;
 
-import com.example.urbify.models.Admin;
 import com.example.urbify.models.Vigilant;
-import com.example.urbify.service.AdminService;
 import com.example.urbify.service.VigilantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 
 @Controller
@@ -19,57 +18,63 @@ public class VigilantController {
     private VigilantService vigilantService;
 
     @Autowired
-    private AdminService adminService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Métodos para gestionar vigilantes
-    @GetMapping("/vigilant")
+    // Listar vigilantes
+    @GetMapping
     public String listVigilant(Model model) {
         model.addAttribute("vigilantes", vigilantService.listAllVigilants());
         return "vigilant-view/vigilant-list";
     }
 
-    @GetMapping("/vigilants/new")
+    // Mostrar formulario de creación de vigilante
+    @GetMapping("/new")
     public String showNewFormVigilant(Model model) {
         model.addAttribute("vigilant", new Vigilant());
         return "vigilant-view/vigilant-form";
     }
 
-    @PostMapping("/vigilants")
-    public String saveVigilant(@ModelAttribute Vigilant vigilant, Principal principal) {
-        // Obtener el admin actualmente autenticado
-        String adminEmail = principal.getName();
-        Admin admin = adminService.findByEmail(adminEmail);
-
-        if (admin != null) {
-            vigilant.setAdmin(admin);
-        } else {
-            return "redirect:/admins/vigilants?error=admin_not_found";
-        }
-
+    // Guardar vigilante
+    @PostMapping
+    public String saveVigilant(@ModelAttribute Vigilant vigilant) {
         vigilant.setPassword(passwordEncoder.encode(vigilant.getPassword()));
         vigilantService.save(vigilant);
-        return "redirect:/admins/vigilants";
+        return "redirect:/vigilant";
     }
 
-    @GetMapping("/vigilants/edit/{id}")
+    // Formulario para editar vigilante
+    @GetMapping("/edit/{id}")
     public String showFormEditVigilant(@PathVariable Long id, Model model) {
         Vigilant vigilant = vigilantService.getById(id);
         if (vigilant == null) {
-            return "redirect:/admins/vigilants";
+            return "redirect:/vigilant";
         }
+
         model.addAttribute("vigilant", vigilant);
+        model.addAttribute("admin", vigilant.getAdmin());
+
         return "vigilant-view/vigilant-form";
     }
 
-    @PostMapping("/vigilants/delete/{id}")
+    // Eliminar vigilante
+    @PostMapping("/delete/{id}")
     public String deleteVigilant(@PathVariable Long id) {
-        vigilantService.delete(id);
-        return "redirect:/admins/vigilants";
+        Vigilant vigilant = vigilantService.getById(id);
+
+        if (vigilant == null) {
+            return "redirect:/vigilant?error=vigilant_not_found";
+        }
+
+        try {
+            vigilantService.delete(id);
+        } catch (Exception e) {
+            return "redirect:/vigilant?error=delete_failed";
+        }
+
+        return "redirect:/vigilant?success=deleted";
     }
 
+    // Panel de acciones del vigilante
     @GetMapping("/action")
     public String vigilantAction(Model model, Principal principal) {
         String email = principal.getName();

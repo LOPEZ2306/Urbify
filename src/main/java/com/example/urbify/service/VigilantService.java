@@ -5,6 +5,7 @@ import com.example.urbify.repository.VigilantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,10 @@ public class VigilantService {
     private PasswordEncoder passwordEncoder;
 
     public Vigilant save(Vigilant vigilant) {
-        vigilant.setPassword(passwordEncoder.encode(vigilant.getPassword()));
+        // Verificar si la contraseña ya está encriptada para evitar doble encriptación
+        if (!vigilant.getPassword().startsWith("$2a$")) {
+            vigilant.setPassword(passwordEncoder.encode(vigilant.getPassword()));
+        }
         return vigilantRepository.save(vigilant);
     }
 

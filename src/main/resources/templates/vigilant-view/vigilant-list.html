@@ -86,16 +86,20 @@
                     <td class="p-2 border" th:text="${vigilant.turn}"></td>
                     <td class="p-2 border" th:text="${vigilant.company}"></td>
                     <td class="p-2 border space-x-2">
-                        <a th:href="@{/admins/vigilants/edit/{id}(id=${vigilant.id})}"
+                        <a th:href="@{/vigilant/edit/{id}(id=${vigilant.id})}"
                            class="px-2 py-1 text-white bg-yellow-500 rounded hover:bg-yellow-700">
                             <i class="hgi hgi-stroke hgi-pencil-edit-02"></i>
                         </a>
+
                         <form th:action="@{/admins/vigilants/delete/{id}(id=${vigilant.id})}" method="post" class="inline">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <button type="submit" class="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
                                     onclick="return confirm('¿Eliminar vigilante?')">
                                 <i class="hgi hgi-stroke hgi-alert-02"></i>
                             </button>
+                        </form>
+
+                        </button>
                         </form>
                     </td>
                 </tr>
