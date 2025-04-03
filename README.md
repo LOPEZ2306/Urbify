@@ -28,4 +28,4 @@
 ## 📖 Más Información  
 
 Para más detalles sobre el proyecto, consulta la documentación completa:  
-📄 [Documentación del Proyecto](#)  
+📄 [(https://docs.google.com/document/d/1xe72uqsPaGxqR-nMRDAUmUnDLs7ABKy5DzQwNpMcCUs/edit?usp=sharing)](#)  
