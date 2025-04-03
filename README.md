@@ -1,6 +1,6 @@
 # 🌆 Urbify | Gestión Residencial Inteligente  
 
-**Urbify** es una plataforma web diseñada para optimizar la administración residencial, brindando herramientas eficientes para gestionar la seguridad y el control de acceso en comunidades. Su enfoque intuitivo permite a los administradores y vigilantes gestionar residentes, vehículos y accesos de manera sencilla y segura.  
+**Urbify** es un sitio web diseñado para mejorar y optimizar la gestión residencial. Facilita la administración y mejora la experiencia de los residentes al permitir una gestión más eficiente de las tareas relacionadas con la comunidad, tales como la administración de vigilantes y otras actividades residenciales.
 
 ---
 
@@ -18,14 +18,14 @@
 
 ## 🛠️ Tecnologías Utilizadas  
 
-🔹 **Back-end:** Spring Boot & Spring Security  
-🔹 **Base de datos:** SQL  
-🔹 **Front-end:** Thymeleaf  
-🔹 **Gestión de dependencias:** Maven  
+🔹 **Spring Boot & Spring Security**
+🔹 **SQL**   
+🔹 **Thymeleaf**  
+🔹 **Maven**  
 
 ---
 
 ## 📖 Más Información  
 
-Para más detalles sobre el proyecto, consulta la documentación completa:  
+Para más detalles sobre el proyecto, consulta:  
 📄 [(https://docs.google.com/document/d/1xe72uqsPaGxqR-nMRDAUmUnDLs7ABKy5DzQwNpMcCUs/edit?usp=sharing)](#)  
