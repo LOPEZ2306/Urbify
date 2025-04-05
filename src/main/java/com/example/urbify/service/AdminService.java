@@ -18,25 +18,10 @@ public class AdminService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Admin save(Admin admin) {
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-        return adminRepository.save(admin);
-    }
-
-    public List<Admin> listAllAdmins() {
-        return adminRepository.findAll();
-    }
-
-    public Admin getById(Long id) {
-        return adminRepository.findById(id).orElse(null);
-    }
 
     public Admin findByEmail(String email) {
         return adminRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Admin no encontrado"));
     }
 
-    public void delete(Long id) {
-        adminRepository.deleteById(id);
-    }
 }

@@ -26,46 +26,6 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Mostrar lista de administradores
-    @GetMapping
-    public String listAdmins(Model model) {
-        model.addAttribute("administradores", adminService.listAllAdmins());
-        return "admin-list";
-    }
-
-    // Mostrar formulario para crear nuevo admin
-    @GetMapping("/new")
-    public String showNewFormAdmin(Model model) {
-        model.addAttribute("admin", new Admin());
-        return "admin-form";
-    }
-
-    // Guardar nuevo administrador
-    @PostMapping
-    public String saveAdmin(@ModelAttribute Admin admin) {
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-        adminService.save(admin);
-        return "redirect:/admins";
-    }
-
-    // Mostrar formulario para editar admin
-    @GetMapping("/edit/{id}")
-    public String showFormEditAdmin(@PathVariable Long id, Model model) {
-        Admin admin = adminService.getById(id);
-        if (admin == null) {
-            return "redirect:/admins";
-        }
-        model.addAttribute("admin", admin);
-        return "admin-form";
-    }
-
-    // Eliminar administrador
-    @PostMapping("/delete/{id}")
-    public String deleteAdmin(@PathVariable Long id) {
-        adminService.delete(id);
-        return "redirect:/admins";
-    }
-
     // Panel de acciones del administrador
     @GetMapping("/action")
     public String adminAction(Model model, Principal principal) {
